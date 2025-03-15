@@ -301,6 +301,12 @@ body {
         gap: 10px;
     }
 
+    #bet-amount {
+        width: 100%;
+        font-size: 16px;
+        padding: 8px;
+    }
+
     .betting button,
     #roll-btn,
     #cancel-bet-btn,
@@ -339,33 +345,5 @@ body {
     }
 }
 
-.bet-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
-}
-
-.bet-buttons button {
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    background: #ffcc00;
-    color: #333;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.bet-buttons button:hover {
-    background: #ffaa00;
-}
-
-@media (max-width: 768px) {
-    .bet-buttons button {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-}
 
 
