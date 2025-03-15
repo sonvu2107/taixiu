@@ -1,4 +1,4 @@
-let money = 10000;
+let money = 25000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
@@ -62,9 +62,12 @@ function cancelBet() {
 let winCount = 0;
 let loseCount = 0;
 
-function updateWinRate() {
+function updateWinStats() {
   let totalGames = winCount + loseCount;
   let winRate = totalGames > 0 ? ((winCount / totalGames) * 100).toFixed(2) : 0;
+
+  document.getElementById("win-count").textContent = winCount;
+  document.getElementById("lose-count").textContent = loseCount;
   document.getElementById("win-rate").textContent = `${winRate}%`;
 }
 
@@ -113,16 +116,16 @@ function rollDice() {
     let betAmount = getBetAmount();
     if (betChoice === result) {
       money += betAmount;
-      winCount++;  // Cập nhật số ván thắng
+      winCount++; // Cập nhật số trận thắng
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
     } else {
       money -= betAmount;
-      loseCount++; // Cập nhật số ván thua
+      loseCount++; // Cập nhật số trận thua
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
     }
 
     document.getElementById("money").textContent = money;
-    updateWinRate(); // Cập nhật tỷ lệ thắng
+    updateWinStats(); // Cập nhật thông tin thắng/thua
 
     if (money <= 0) {
       money = 0;
@@ -134,6 +137,7 @@ function rollDice() {
     betChoice = null;
   }, 3000);
 }
+
 
 function resetMoney() {
   money = 10000;
