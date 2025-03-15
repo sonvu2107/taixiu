@@ -27,9 +27,13 @@
       </div>
       <label for="bet-amount">Nhập số tiền cược:</label>
       <input type="number" id="bet-amount" min="1" placeholder="Nhập số tiền" />
-
       <p id="result"></p>
       <button onclick="rollDice()" id="roll-btn" disabled>Lắc Xúc Xắc</button>
+      <p
+        id="countdown"
+        style="font-size: 18px; font-weight: bold; color: #000"
+      ></p>
+      <button onclick="cancelBet()" id="cancel-bet-btn" disabled>Hủy cược</button>
     </div>
     <script src="script.js"></script>
   </body>

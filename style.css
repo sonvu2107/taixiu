@@ -169,8 +169,8 @@ body {
 }
 
 /* Nhãn */
-label {
-   font-family: "Poppins", Arial, sans-serif; /* Đồng bộ font */
+.label {
+  font-family: "Poppins", Arial, sans-serif; /* Đồng bộ font */
   font-size: 20px; /* Giống stats */
   font-weight: 500;
   letter-spacing: 1px;
@@ -184,3 +184,31 @@ label {
   margin-top: 15px;
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 }
+
+#cancel-bet-btn {
+  background: linear-gradient(135deg, #ff5733, #ff8c42); /* Đỏ cam */
+  border: none;
+  padding: 12px 28px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(255, 87, 51, 0.5);
+}
+
+#cancel-bet-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 100, 70, 0.7);
+}
+
+#cancel-bet-btn:disabled {
+  background: linear-gradient(135deg, #7e7e7e, #555555);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+
