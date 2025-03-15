@@ -2,6 +2,9 @@ let money = 25000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
+let winCount = 0;
+let loseCount = 0;
+let houseMoney = 1000000; // Quỹ nhà cái
 
 function placeBet(choice) {
   let betAmount = getBetAmount();
@@ -59,9 +62,6 @@ function cancelBet() {
   }
 }
 
-let winCount = 0;
-let loseCount = 0;
-
 function updateWinStats() {
   let totalGames = winCount + loseCount;
   let winRate = totalGames > 0 ? ((winCount / totalGames) * 100).toFixed(2) : 0;
@@ -71,10 +71,23 @@ function updateWinStats() {
   document.getElementById("win-rate").textContent = `${winRate}%`;
 }
 
-let houseMoney = 1000000; // Quỹ nhà cái
-
 function updateHouseMoney() {
   document.getElementById("house-money").textContent = houseMoney;
+}
+
+// **Tính toán khả năng thắng dựa trên tỷ lệ thắng/thua**
+function getRiggedResult() {
+  let totalGames = winCount + loseCount;
+  let winRate = totalGames > 0 ? (winCount / totalGames) * 100 : 50;
+
+  let riggedChance = 0;
+  if (winRate > 60) {
+    riggedChance = 0.7; // Nếu người chơi thắng quá nhiều, nhà cái sẽ tăng tỷ lệ thua lên 70%
+  } else if (winRate < 40) {
+    riggedChance = 0.3; // Nếu người chơi thua nhiều, giữ tỷ lệ thắng công bằng hơn
+  }
+
+  return Math.random() > riggedChance;
 }
 
 function rollDice() {
@@ -103,11 +116,17 @@ function rollDice() {
     dice2.classList.remove("shaking");
     dice3.classList.remove("shaking");
 
+    let isWin = getRiggedResult();
+
     let num1 = Math.floor(Math.random() * 6) + 1;
     let num2 = Math.floor(Math.random() * 6) + 1;
     let num3 = Math.floor(Math.random() * 6) + 1;
     let total = num1 + num2 + num3;
     let result = total >= 11 ? "Tài" : "Xỉu";
+
+    if (!isWin) {
+      result = betChoice === "Tài" ? "Xỉu" : "Tài";
+    }
 
     dice1.textContent = num1;
     dice2.textContent = num2;
@@ -134,7 +153,7 @@ function rollDice() {
 
     document.getElementById("money").textContent = money;
     updateWinStats();
-    updateHouseMoney(); // Cập nhật số tiền nhà cái
+    updateHouseMoney();
 
     // Kiểm tra nếu nhà cái hết tiền
     if (houseMoney <= 0) {
@@ -146,6 +165,8 @@ function rollDice() {
     if (money <= 0) {
       money = 0;
       document.getElementById("reset-money-btn").style.display = "block";
+    } else {
+      document.getElementById("reset-money-btn").style.display = "none";
     }
 
     document.getElementById("roll-btn").disabled = true;
@@ -154,11 +175,11 @@ function rollDice() {
   }, 3000);
 }
 
-
 function resetMoney() {
-  money = 10000;
+  money = 25000;
   updateMoney(money);
-  alert("Bạn đã được cấp lại 10000💰 để tiếp tục chơi!");
+  document.getElementById("reset-money-btn").style.display = "none";
+  alert("Bạn đã được cấp lại 25000💰 để tiếp tục chơi!");
 }
 
 function updateMoney(amount) {
