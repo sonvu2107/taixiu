@@ -1,4 +1,4 @@
-let money = 1000;
+let money = 10000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
@@ -10,7 +10,12 @@ function placeBet(choice) {
     }
     betChoice = choice;
     document.getElementById("roll-btn").disabled = false;
-    alert(`Bạn đã cược ${choice} 100💰`);
+    alert(`Bạn đã cược ${choice} với mức cược ${getBetAmount()}💰`);
+}
+
+function getBetAmount() {
+    let multiplier = parseInt(document.getElementById("bet-multiplier").value);
+    return 100 * multiplier;
 }
 
 function rollDice() {
@@ -60,13 +65,16 @@ function rollDice() {
         document.getElementById("tai-count").textContent = taiCount;
         document.getElementById("xiu-count").textContent = xiuCount;
 
+        // Lấy số tiền cược
+        let betAmount = getBetAmount();
+
         // Kiểm tra thắng thua
         if (betChoice === result) {
-            money += 100;
-            resultText.innerHTML = `Tổng: ${total} - <strong style="color: #00ff00;">${result} 🎉 (Bạn thắng!)</strong>`;
+            money += betAmount;
+            resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
         } else {
-            money -= 100;
-            resultText.innerHTML = `Tổng: ${total} - <strong style="color: #ff0000;">${result} 😢 (Bạn thua rồi thằng ngu!)</strong>`;
+            money -= betAmount;
+            resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
         }
 
         document.getElementById("money").textContent = money;
