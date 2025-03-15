@@ -2,9 +2,6 @@ let money = 25000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
-let winCount = 0;
-let loseCount = 0;
-let houseMoney = 1000000; // Quỹ nhà cái
 
 function placeBet(choice) {
   let betAmount = getBetAmount();
@@ -35,7 +32,7 @@ function getBetAmount() {
 function startCountdown() {
   let countdownElement = document.getElementById("countdown");
   let rollButton = document.getElementById("roll-btn");
-  rollButton.disabled = true;
+  rollButton.disabled = true; // Disable ngay khi bắt đầu đếm ngược
 
   let timeLeft = 3;
   countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
@@ -47,7 +44,7 @@ function startCountdown() {
     } else {
       clearInterval(countdownInterval);
       countdownElement.textContent = "";
-      rollButton.disabled = false;
+      rollButton.disabled = false; // Enable lại sau khi đếm ngược xong
     }
   }, 1000);
 }
@@ -62,6 +59,9 @@ function cancelBet() {
   }
 }
 
+let winCount = 0;
+let loseCount = 0;
+
 function updateWinStats() {
   let totalGames = winCount + loseCount;
   let winRate = totalGames > 0 ? ((winCount / totalGames) * 100).toFixed(2) : 0;
@@ -69,25 +69,6 @@ function updateWinStats() {
   document.getElementById("win-count").textContent = winCount;
   document.getElementById("lose-count").textContent = loseCount;
   document.getElementById("win-rate").textContent = `${winRate}%`;
-}
-
-function updateHouseMoney() {
-  document.getElementById("house-money").textContent = houseMoney;
-}
-
-// **Tính toán khả năng thắng dựa trên tỷ lệ thắng/thua**
-function getRiggedResult() {
-  let totalGames = winCount + loseCount;
-  let winRate = totalGames > 0 ? (winCount / totalGames) * 100 : 50;
-
-  let riggedChance = 0;
-  if (winRate > 60) {
-    riggedChance = 0.7; // Nếu người chơi thắng quá nhiều, nhà cái sẽ tăng tỷ lệ thua lên 70%
-  } else if (winRate < 40) {
-    riggedChance = 0.3; // Nếu người chơi thua nhiều, giữ tỷ lệ thắng công bằng hơn
-  }
-
-  return Math.random() > riggedChance;
 }
 
 function rollDice() {
@@ -133,56 +114,22 @@ function rollDice() {
     document.getElementById("xiu-count").textContent = xiuCount;
 
     let betAmount = getBetAmount();
-    let winAmount = 0;
-    let jackpotRoll = Math.random() * 100; // Xác suất từ 0 - 100
-
     if (betChoice === result) {
-      // Kiểm tra "nổ hũ"
-      if (jackpotRoll <= 0.1) { 
-        winAmount = betAmount * 100;
-        alert("🎉 CHÚC MỪNG! Bạn trúng JACKPOT x100 (TÀI LỘC QUÁ LỚN) 🎰💰💰💰");
-      } else if (jackpotRoll <= 10.1) { 
-        winAmount = betAmount * 5;
-        alert("🔥 Bạn trúng x5 tiền cược! 🤑");
-      } else if (jackpotRoll <= 25.1) { 
-        winAmount = 0;
-        alert("😈 Nổ dái! Bạn không nhận được gì! Hahahaha! 🤡");
-      } else if (jackpotRoll <= 55.1) { 
-        winAmount = betAmount * 2;
-        alert("🎊 Bạn trúng x2 tiền cược! Không tệ đâu 😏");
-      } else {
-        winAmount = betAmount;
-        alert("😌 Bạn chỉ lấy lại số tiền cược, không thắng không thua.");
-      }
-
-      money += winAmount;
-      houseMoney -= winAmount; // Nhà cái mất tiền
-      winCount++;
-
-      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${winAmount}💰!</strong>`;
+      money += betAmount;
+      winCount++; // Cập nhật số trận thắng
+      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
     } else {
       money -= betAmount;
-      houseMoney += betAmount; // Nhà cái ăn tiền
-      loseCount++;
-
+      loseCount++; // Cập nhật số trận thua
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
     }
 
     document.getElementById("money").textContent = money;
-    updateWinStats();
-    updateHouseMoney();
-
-    if (houseMoney <= 0) {
-      alert("🎉 Nhà cái đã cạn tiền! Bạn thắng chung cuộc!");
-      houseMoney = 1000000;
-      money += 50000;
-    }
+    updateWinStats(); // Cập nhật thông tin thắng/thua
 
     if (money <= 0) {
       money = 0;
       document.getElementById("reset-money-btn").style.display = "block";
-    } else {
-      document.getElementById("reset-money-btn").style.display = "none";
     }
 
     document.getElementById("roll-btn").disabled = true;
@@ -191,105 +138,20 @@ function rollDice() {
   }, 3000);
 }
 
-function resetMoney() {
-  money = 25000;
-  updateMoney(money);
-  document.getElementById("reset-money-btn").style.display = "none";
-  alert("Bạn đã được cấp lại 25000💰 để tiếp tục chơi!");
-}
-
 function updateMoney(amount) {
   money = amount;
   document.getElementById("money").textContent = money;
 
-  let resetBtn = document.getElementById("reset-money-btn");
-  let menu = document.getElementById("menu");
-
+  // Kiểm tra nếu hết tiền thì hiện nút cấp tiền
   if (money <= 0) {
-    resetBtn.style.display = "block";
-    menu.style.display = "block";
+    document.getElementById("reset-money-btn").style.display = "block";
   } else {
-    resetBtn.style.display = "none";
-    menu.style.display = "none";
+    document.getElementById("reset-money-btn").style.display = "none";
   }
 }
 
-// Tỉ lệ nổ hũ
-const jackpotRates = [
-  { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
-  { chance: 30, multiplier: 2, message: "Nổ Hũ 🎉 Nhận gấp đôi số tiền cược!" },
-  { chance: 15, multiplier: 0, message: "Nổ Dái 🤡 Không nhận được gì!" },
-  { chance: 10, multiplier: 5, message: "Siêu Nổ Hũ 💥 Nhận x5 số tiền cược!" },
-  { chance: 0.1, multiplier: 100, message: "Đại Nổ Hũ 🔥 Nhận x100 số tiền cược!!!" }
-];
-
-// Hàm kiểm tra nổ hũ
-function checkJackpot(betAmount) {
-  let random = Math.random() * 100;
-  let cumulativeChance = 0;
-
-  for (let jackpot of jackpotRates) {
-    cumulativeChance += jackpot.chance;
-    if (random <= cumulativeChance) {
-      showJackpotPopup(jackpot.message, jackpot.multiplier * betAmount);
-      return jackpot.multiplier;
-    }
-  }
-  return 1; // Mặc định không nổ hũ
-}
-
-// Hiển thị popup khi nổ hũ
-function showJackpotPopup(message, reward) {
-  let popup = document.getElementById("jackpot-popup");
-  let popupMessage = document.getElementById("jackpot-message");
-  let popupAmount = document.getElementById("jackpot-amount");
-
-  popupMessage.textContent = message;
-  popupAmount.textContent = `+${reward}💰`;
-  popup.style.display = "block";
-
-  // Hiệu ứng rung
-  popup.classList.add("shake");
-
-  setTimeout(() => {
-    popup.style.display = "none";
-    popup.classList.remove("shake");
-  }, 3000);
-}
-
-// Thêm vào hàm rollDice
-function rollDice() {
-  if (!betChoice) {
-    alert("Bạn cần chọn cược trước!");
-    return;
-  }
-
-  let betAmount = getBetAmount();
-  let multiplier = checkJackpot(betAmount); // Kiểm tra nổ hũ
-  let finalWinAmount = betAmount * multiplier;
-
-  if (multiplier > 0) {
-    money += finalWinAmount;
-  } else {
-    money -= betAmount;
-  }
-
+function resetMoney() {
+  money = 25000;
   updateMoney(money);
+  alert("Bạn đã được cấp lại 25000💰 để tiếp tục chơi!");
 }
-
-let betAmount = 100; // Số tiền cược mặc định
-
-function setBet(multiplier) {
-    if (multiplier === 'all') {
-        betAmount = money; // Đặt cược toàn bộ tiền hiện có
-    } else {
-        betAmount = 100 * multiplier; // Cược theo mức chọn (x1 = 100, x2 = 200, ...)
-    }
-
-    if (betAmount > money) {
-        betAmount = money; // Giới hạn không vượt quá số tiền hiện có
-    }
-
-    document.getElementById("bet-amount-text").textContent = betAmount;
-}
-
