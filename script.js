@@ -23,9 +23,10 @@ function placeBet(choice) {
   document.getElementById("roll-btn").disabled = false;
   document.getElementById("cancel-bet-btn").disabled = false;
 
-  alert(`Bạn đã cược ${choice} với mức cược ${betAmount}💰`);
+  alert(`Bạn đã cược ${choice} với mức cược ${betAmount}💰`); 
   startCountdown();
 }
+
 
 function getBetAmount() {
   let amount = parseInt(document.getElementById("bet-amount").value);
@@ -38,12 +39,12 @@ function startCountdown() {
   rollButton.disabled = true;
 
   let timeLeft = 3;
-  countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
+  countdownElement.textContent = `Lắc sau: ${timeLeft}s`; // Sửa chuỗi hiển thị
 
   let countdownInterval = setInterval(() => {
     timeLeft--;
     if (timeLeft > 0) {
-      countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
+      countdownElement.textContent = `Lắc sau: ${timeLeft}s`; // Sửa chuỗi hiển thị
     } else {
       clearInterval(countdownInterval);
       countdownElement.textContent = "";
@@ -68,7 +69,7 @@ function updateWinStats() {
 
   document.getElementById("win-count").textContent = winCount;
   document.getElementById("lose-count").textContent = loseCount;
-  document.getElementById("win-rate").textContent = `${winRate}%`;
+  document.getElementById("win-rate").textContent =`${winRate}%`;
 }
 
 function updateHouseMoney() {
@@ -95,10 +96,6 @@ function rollDice() {
     alert("Bạn cần chọn cược trước!");
     return;
   }
-
-  let betAmount = getBetAmount();
-  let multiplier = checkJackpot(betAmount); // Kiểm tra nổ hũ
-  let finalWinAmount = betAmount * multiplier;
 
   let dice1 = document.getElementById("dice1");
   let dice2 = document.getElementById("dice2");
@@ -136,12 +133,35 @@ function rollDice() {
     document.getElementById("tai-count").textContent = taiCount;
     document.getElementById("xiu-count").textContent = xiuCount;
 
+    let betAmount = getBetAmount();
+    let winAmount = 0;
+    let jackpotRoll = Math.random() * 100; // Xác suất từ 0 - 100
+
+    // Kiểm tra kết quả thắng thua
     if (betChoice === result) {
-      money += finalWinAmount;
-      houseMoney -= finalWinAmount; // Nhà cái mất tiền
+      // Kiểm tra "nổ hũ"
+      if (jackpotRoll <= 0.1) { 
+        winAmount = betAmount * 100;
+        alert("🎉 CHÚC MỪNG! Bạn trúng JACKPOT x100 (TÀI LỘC QUÁ LỚN) 🎰💰💰💰");
+      } else if (jackpotRoll <= 10.1) { 
+        winAmount = betAmount * 5;
+        alert("🔥 Bạn trúng x5 tiền cược! 🤑");
+      } else if (jackpotRoll <= 25.1) { 
+        winAmount = 0;
+        alert("😈 Nổ dái! Bạn không nhận được gì! Hahahaha! 🤡");
+      } else if (jackpotRoll <= 55.1) { 
+        winAmount = betAmount * 2;
+        alert("🎊 Bạn trúng x2 tiền cược! Không tệ đâu 😏");
+      } else {
+        winAmount = betAmount;
+        alert("😌 Bạn chỉ lấy lại số tiền cược, không thắng không thua.");
+      }
+
+      money += winAmount;
+      houseMoney -= winAmount; // Nhà cái mất tiền
       winCount++;
 
-      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${finalWinAmount}💰!</strong>`;
+      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${winAmount}💰!</strong>`;
     } else {
       money -= betAmount;
       houseMoney += betAmount; // Nhà cái ăn tiền
@@ -153,13 +173,28 @@ function rollDice() {
     document.getElementById("money").textContent = money;
     updateWinStats();
     updateHouseMoney();
+    
+      let betAmount = getBetAmount();
+  let multiplier = checkJackpot(betAmount); // Kiểm tra nổ hũ
+  let finalWinAmount = betAmount * multiplier;
 
+  if (multiplier > 0) {
+    money += finalWinAmount;
+  } else {
+    money -= betAmount;
+  }
+
+  updateMoney(money);
+}
+
+    // Kiểm tra nếu nhà cái cạn tiền
     if (houseMoney <= 0) {
       alert("🎉 Nhà cái đã cạn tiền! Bạn thắng chung cuộc!");
       houseMoney = 1000000;
       money += 50000;
     }
 
+    // Kiểm tra nếu người chơi hết tiền
     if (money <= 0) {
       money = 0;
       document.getElementById("reset-money-btn").style.display = "block";
@@ -173,7 +208,6 @@ function rollDice() {
   }, 3000);
 }
 
-// Tính năng reset tiền
 function resetMoney() {
   money = 25000;
   updateMoney(money);
@@ -228,7 +262,7 @@ function showJackpotPopup(message, reward) {
   let popupAmount = document.getElementById("jackpot-amount");
 
   popupMessage.textContent = message;
-  popupAmount.textContent = `+${reward}💰`;
+  popupAmount.textContent = `${reward}💰`;
   popup.style.display = "block";
 
   // Hiệu ứng rung
@@ -243,15 +277,15 @@ function showJackpotPopup(message, reward) {
 let betAmount = 100; // Số tiền cược mặc định
 
 function setBet(multiplier) {
-  if (multiplier === 'all') {
-    betAmount = money; // Đặt cược toàn bộ tiền hiện có
-  } else {
-    betAmount = 100 * multiplier; // Cược theo mức chọn (x1 = 100, x2 = 200, ...)
-  }
+    if (multiplier === 'all') {
+        betAmount = money; // Đặt cược toàn bộ tiền hiện có
+    } else {
+        betAmount = 100 * multiplier; // Cược theo mức chọn (x1 = 100, x2 = 200, ...)
+    }
 
-  if (betAmount > money) {
-    betAmount = money; // Giới hạn không vượt quá số tiền hiện có
-  }
+    if (betAmount > money) {
+        betAmount = money; // Giới hạn không vượt quá số tiền hiện có
+    }
 
-  document.getElementById("bet-amount-text").textContent = betAmount;
+    document.getElementById("bet-amount-text").textContent = betAmount;
 }
