@@ -2,30 +2,27 @@ let money = 10000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
-let countdown = null;
-let countdownTime = 5;
 
 function placeBet(choice) {
-    let betAmount = getBetAmount();
+  let betAmount = getBetAmount();
 
-    if (money < 100) {
-        alert("Bạn không đủ tiền để cược!");
-        return;
-    }
+  if (money < 100) {
+    alert("Bạn không đủ tiền để cược!");
+    return;
+  }
 
-    if (betAmount > money) {
-        alert("Bạn không có đủ tiền để đặt cược số này!");
-        return;
-    }
+  if (betAmount > money) {
+    alert("Bạn không có đủ tiền để đặt cược số này!");
+    return;
+  }
 
-    betChoice = choice;
-    document.getElementById("roll-btn").disabled = false;
-    document.getElementById("cancel-bet-btn").disabled = false;
+  betChoice = choice;
+  document.getElementById("roll-btn").disabled = false;
+  document.getElementById("cancel-bet-btn").disabled = false;
 
-    alert(`Bạn đã cược ${choice} với mức cược ${betAmount}💰`);
-    startCountdown();
+  alert(`Bạn đã cược ${choice} với mức cược ${betAmount}💰`);
+  startCountdown();
 }
-
 
 function getBetAmount() {
   let amount = parseInt(document.getElementById("bet-amount").value);
@@ -33,24 +30,27 @@ function getBetAmount() {
 }
 
 function startCountdown() {
-  let countdownDisplay = document.getElementById("countdown");
-  countdownTime = 5;
-  countdownDisplay.textContent = `Lắc xúc xắc sau: ${countdownTime}s`;
+  let countdownElement = document.getElementById("countdown");
+  let rollButton = document.getElementById("roll-btn");
+  rollButton.disabled = true; // Disable ngay khi bắt đầu đếm ngược
 
-  countdown = setInterval(() => {
-    countdownTime--;
-    countdownDisplay.textContent = `Lắc xúc xắc sau: ${countdownTime}s`;
+  let timeLeft = 3;
+  countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
 
-    if (countdownTime <= 0) {
-      clearInterval(countdown);
-      rollDice();
+  let countdownInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
+    } else {
+      clearInterval(countdownInterval);
+      countdownElement.textContent = "";
+      rollButton.disabled = false; // Enable lại sau khi đếm ngược xong
     }
   }, 1000);
 }
 
 function cancelBet() {
   if (betChoice) {
-    clearInterval(countdown);
     document.getElementById("countdown").textContent = "";
     document.getElementById("roll-btn").disabled = true;
     document.getElementById("cancel-bet-btn").disabled = true;
@@ -114,8 +114,38 @@ function rollDice() {
     }
 
     document.getElementById("money").textContent = money;
+
+    // Kiểm tra nếu hết tiền thì hiện nút cấp tiền
+    if (money <= 0) {
+      money = 0;
+      document.getElementById("reset-money-btn").style.display = "block";
+    }
+
     document.getElementById("roll-btn").disabled = true;
     document.getElementById("cancel-bet-btn").disabled = true;
     betChoice = null;
   }, 3000);
 }
+
+function resetMoney() {
+  if (money === 0) {
+    money = 1000;
+    document.getElementById("money").textContent = money;
+    document.getElementById("reset-money-btn").style.display = "none"; // Ẩn nút sau khi cấp tiền
+    alert("Bạn đã được cấp lại 1000💰 để tiếp tục chơi!");
+  }
+}
+
+function checkResetButton() {
+  if (money <= 0) {
+    document.getElementById("reset-money-btn").style.display = "block"; // Hiện nút nếu hết tiền
+  }
+}
+
+// Gọi checkResetButton() khi cập nhật tiền
+function updateMoney(amount) {
+  money = amount;
+  document.getElementById("money").textContent = money;
+  checkResetButton();
+}
+
