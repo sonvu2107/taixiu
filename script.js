@@ -71,6 +71,12 @@ function updateWinStats() {
   document.getElementById("win-rate").textContent = `${winRate}%`;
 }
 
+let houseMoney = 1000000; // Quỹ nhà cái
+
+function updateHouseMoney() {
+  document.getElementById("house-money").textContent = houseMoney;
+}
+
 function rollDice() {
   if (!betChoice) {
     alert("Bạn cần chọn cược trước!");
@@ -116,16 +122,26 @@ function rollDice() {
     let betAmount = getBetAmount();
     if (betChoice === result) {
       money += betAmount;
-      winCount++; // Cập nhật số trận thắng
+      houseMoney -= betAmount; // Nhà cái mất tiền
+      winCount++;
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
     } else {
       money -= betAmount;
-      loseCount++; // Cập nhật số trận thua
+      houseMoney += betAmount; // Nhà cái ăn tiền
+      loseCount++;
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
     }
 
     document.getElementById("money").textContent = money;
-    updateWinStats(); // Cập nhật thông tin thắng/thua
+    updateWinStats();
+    updateHouseMoney(); // Cập nhật số tiền nhà cái
+
+    // Kiểm tra nếu nhà cái hết tiền
+    if (houseMoney <= 0) {
+      alert("🎉 Nhà cái đã cạn tiền! Bạn thắng chung cuộc!");
+      houseMoney = 1000000; // Reset lại quỹ nhà cái
+      money += 50000; // Thưởng thêm tiền cho người chơi
+    }
 
     if (money <= 0) {
       money = 0;
