@@ -2,22 +2,53 @@ let money = 10000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
+let countdown = null;
+let countdownTime = 5;
 
 function placeBet(choice) {
-    let betAmount = parseInt(document.getElementById("bet-amount").value);
-
-    if (isNaN(betAmount) || betAmount <= 0) {
-        alert("Vui lòng nhập số tiền cược hợp lệ!");
+    if (money < 100) {
+        alert("Bạn không đủ tiền để cược!");
         return;
     }
-    if (betAmount > money) {
-        alert("Bạn không đủ tiền để cược số này!");
-        return;
-    }
-
     betChoice = choice;
-    document.getElementById("roll-btn").disabled = false;
-    alert(`Bạn đã cược ${betAmount}💰 vào ${choice}`);
+    document.getElementById("roll-btn").disabled = true;
+    document.getElementById("cancel-bet-btn").disabled = false;
+    let betAmount = getBetAmount();
+    alert(`Bạn đã cược ${choice} với mức cược ${betAmount}💰`);
+
+    startCountdown();
+}
+
+function getBetAmount() {
+    let amount = parseInt(document.getElementById("bet-amount").value);
+    return isNaN(amount) || amount <= 0 ? 100 : amount;
+}
+
+function startCountdown() {
+    let countdownDisplay = document.getElementById("countdown");
+    countdownTime = 5;
+    countdownDisplay.textContent = `Lắc xúc xắc sau: ${countdownTime}s`;
+
+    countdown = setInterval(() => {
+        countdownTime--;
+        countdownDisplay.textContent = `Lắc xúc xắc sau: ${countdownTime}s`;
+        
+        if (countdownTime <= 0) {
+            clearInterval(countdown);
+            rollDice();
+        }
+    }, 1000);
+}
+
+function cancelBet() {
+    if (betChoice) {
+        clearInterval(countdown);
+        document.getElementById("countdown").textContent = "";
+        document.getElementById("roll-btn").disabled = true;
+        document.getElementById("cancel-bet-btn").disabled = true;
+        betChoice = null;
+        alert("Bạn đã hủy cược và nhận lại tiền!");
+    }
 }
 
 function rollDice() {
@@ -30,14 +61,15 @@ function rollDice() {
     let dice2 = document.getElementById("dice2");
     let dice3 = document.getElementById("dice3");
     let resultText = document.getElementById("result");
+    document.getElementById("countdown").textContent = "";
 
-    let betAmount = parseInt(document.getElementById("bet-amount").value);
-    
+    // Xóa nội dung xúc xắc cũ
     dice1.textContent = "";
     dice2.textContent = "";
     dice3.textContent = "";
     resultText.textContent = "Lắc xúc xắc...";
 
+    // Hiệu ứng rung
     dice1.classList.add("shaking");
     dice2.classList.add("shaking");
     dice3.classList.add("shaking");
@@ -47,16 +79,9 @@ function rollDice() {
         dice2.classList.remove("shaking");
         dice3.classList.remove("shaking");
 
-        // Danh sách kết quả có trọng số cao cho 4-4-1 và 6-3-1
-        let weightedOutcomes = [
-            [4, 4, 1], [4, 4, 1], [4, 4, 1], [4, 4, 1], 
-            [6, 3, 1], [6, 3, 1], [6, 3, 1], [6, 3, 1], 
-            [1, 2, 3], [2, 2, 2], [3, 3, 3], [5, 5, 6], 
-            [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1]
-        ];
-
-        let selectedRoll = weightedOutcomes[Math.floor(Math.random() * weightedOutcomes.length)];
-        let [num1, num2, num3] = selectedRoll;
+        let num1 = Math.floor(Math.random() * 6) + 1;
+        let num2 = Math.floor(Math.random() * 6) + 1;
+        let num3 = Math.floor(Math.random() * 6) + 1;
         let total = num1 + num2 + num3;
         let result = total >= 11 ? "Tài" : "Xỉu";
 
@@ -66,10 +91,7 @@ function rollDice() {
         document.getElementById("tai-count").textContent = taiCount;
         document.getElementById("xiu-count").textContent = xiuCount;
 
-        dice1.textContent = num1;
-        dice2.textContent = num2;
-        dice3.textContent = num3;
-
+        let betAmount = getBetAmount();
         if (betChoice === result) {
             money += betAmount;
             resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
@@ -80,6 +102,7 @@ function rollDice() {
 
         document.getElementById("money").textContent = money;
         document.getElementById("roll-btn").disabled = true;
+        document.getElementById("cancel-bet-btn").disabled = true;
         betChoice = null;
     }, 3000);
 }
