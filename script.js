@@ -32,7 +32,7 @@ function getBetAmount() {
 function startCountdown() {
   let countdownElement = document.getElementById("countdown");
   let rollButton = document.getElementById("roll-btn");
-  rollButton.disabled = true; // Disable ngay khi bắt đầu đếm ngược
+  rollButton.disabled = true;
 
   let timeLeft = 3;
   countdownElement.textContent = `Lắc sau: ${timeLeft}s`;
@@ -44,7 +44,7 @@ function startCountdown() {
     } else {
       clearInterval(countdownInterval);
       countdownElement.textContent = "";
-      rollButton.disabled = false; // Enable lại sau khi đếm ngược xong
+      rollButton.disabled = false;
     }
   }, 1000);
 }
@@ -71,13 +71,11 @@ function rollDice() {
   let resultText = document.getElementById("result");
   document.getElementById("countdown").textContent = "";
 
-  // Xóa nội dung xúc xắc cũ
   dice1.textContent = "";
   dice2.textContent = "";
   dice3.textContent = "";
   resultText.textContent = "Lắc xúc xắc...";
 
-  // Hiệu ứng rung
   dice1.classList.add("shaking");
   dice2.classList.add("shaking");
   dice3.classList.add("shaking");
@@ -93,7 +91,6 @@ function rollDice() {
     let total = num1 + num2 + num3;
     let result = total >= 11 ? "Tài" : "Xỉu";
 
-    // Cập nhật số điểm lên xúc xắc
     dice1.textContent = num1;
     dice2.textContent = num2;
     dice3.textContent = num3;
@@ -113,14 +110,7 @@ function rollDice() {
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
     }
 
-    document.getElementById("money").textContent = money;
-
-    // Kiểm tra nếu hết tiền thì hiện nút cấp tiền
-    if (money <= 0) {
-      money = 0;
-      document.getElementById("reset-money-btn").style.display = "block";
-    }
-
+    updateMoney(money);
     document.getElementById("roll-btn").disabled = true;
     document.getElementById("cancel-bet-btn").disabled = true;
     betChoice = null;
@@ -128,24 +118,23 @@ function rollDice() {
 }
 
 function resetMoney() {
-  if (money === 0) {
-    money = 1000;
-    document.getElementById("money").textContent = money;
-    document.getElementById("reset-money-btn").style.display = "none"; // Ẩn nút sau khi cấp tiền
-    alert("Bạn đã được cấp lại 1000💰 để tiếp tục chơi!");
-  }
+  money = 1000;
+  updateMoney(money);
+  alert("Bạn đã được cấp lại 1000💰 để tiếp tục chơi!");
 }
 
-function checkResetButton() {
-  if (money <= 0) {
-    document.getElementById("reset-money-btn").style.display = "block"; // Hiện nút nếu hết tiền
-  }
-}
-
-// Gọi checkResetButton() khi cập nhật tiền
 function updateMoney(amount) {
   money = amount;
   document.getElementById("money").textContent = money;
-  checkResetButton();
-}
 
+  let resetBtn = document.getElementById("reset-money-btn");
+  let menu = document.getElementById("menu");
+
+  if (money <= 0) {
+    resetBtn.style.display = "block";
+    menu.style.display = "block";
+  } else {
+    resetBtn.style.display = "none";
+    menu.style.display = "none";
+  }
+}

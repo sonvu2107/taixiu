@@ -25,12 +25,11 @@
         <button onclick="placeBet('Tài')">Cược Tài</button>
         <button onclick="placeBet('Xỉu')">Cược Xỉu</button>
       </div>
-      <div class="menu" id="menu">
-  <button id="reset-money-btn" style="display: none;" onclick="resetMoney()">
-    Cấp lại 1000💰
+     <div class="menu" id="menu">
+  <button id="reset-money-btn" onclick="resetMoney()" style="display: none;">
+    🔄 Cấp lại 1000💰
   </button>
 </div>
-
       <label for="bet-amount">Nhập số tiền cược:</label>
       <input type="number" id="bet-amount" min="1" placeholder="Nhập số tiền" />
       <p id="result"></p>
