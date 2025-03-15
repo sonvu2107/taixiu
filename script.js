@@ -59,6 +59,15 @@ function cancelBet() {
   }
 }
 
+let winCount = 0;
+let loseCount = 0;
+
+function updateWinRate() {
+  let totalGames = winCount + loseCount;
+  let winRate = totalGames > 0 ? ((winCount / totalGames) * 100).toFixed(2) : 0;
+  document.getElementById("win-rate").textContent = `${winRate}%`;
+}
+
 function rollDice() {
   if (!betChoice) {
     alert("Bạn cần chọn cược trước!");
@@ -104,13 +113,22 @@ function rollDice() {
     let betAmount = getBetAmount();
     if (betChoice === result) {
       money += betAmount;
+      winCount++;  // Cập nhật số ván thắng
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
     } else {
       money -= betAmount;
+      loseCount++; // Cập nhật số ván thua
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
     }
 
-    updateMoney(money);
+    document.getElementById("money").textContent = money;
+    updateWinRate(); // Cập nhật tỷ lệ thắng
+
+    if (money <= 0) {
+      money = 0;
+      document.getElementById("reset-money-btn").style.display = "block";
+    }
+
     document.getElementById("roll-btn").disabled = true;
     document.getElementById("cancel-bet-btn").disabled = true;
     betChoice = null;
@@ -118,9 +136,9 @@ function rollDice() {
 }
 
 function resetMoney() {
-  money = 1000;
+  money = 10000;
   updateMoney(money);
-  alert("Bạn đã được cấp lại 1000💰 để tiếp tục chơi!");
+  alert("Bạn đã được cấp lại 10000💰 để tiếp tục chơi!");
 }
 
 function updateMoney(amount) {
