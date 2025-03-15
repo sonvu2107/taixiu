@@ -7,7 +7,7 @@ let loseCount = 0;
 let houseMoney = 1000000; // Quỹ nhà cái
 
 function placeBet(choice) {
-  let betAmount = getBetAmount();
+  let betAmount = setBet();
 
   if (money < 100) {
     alert("Bạn không đủ tiền để cược!");
@@ -27,11 +27,6 @@ function placeBet(choice) {
   startCountdown();
 }
 
-
-function getBetAmount() {
-  let amount = parseInt(document.getElementById("bet-amount").value);
-  return isNaN(amount) || amount <= 0 ? 100 : amount;
-}
 
 function startCountdown() {
   let countdownElement = document.getElementById("countdown");
@@ -173,19 +168,6 @@ function rollDice() {
     document.getElementById("money").textContent = money;
     updateWinStats();
     updateHouseMoney();
-    
-      let betAmount = getBetAmount();
-  let multiplier = checkJackpot(betAmount); // Kiểm tra nổ hũ
-  let finalWinAmount = betAmount * multiplier;
-
-  if (multiplier > 0) {
-    money += finalWinAmount;
-  } else {
-    money -= betAmount;
-  }
-
-  updateMoney(money);
-}
 
     // Kiểm tra nếu nhà cái cạn tiền
     if (houseMoney <= 0) {
