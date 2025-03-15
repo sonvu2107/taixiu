@@ -40,9 +40,20 @@
           🔄 Cấp lại 10000💰
         </button>
       </div>
-      <label for="bet-amount">Nhập số tiền cược:</label>
-      <input type="number" id="bet-amount" min="1" placeholder="Nhập số tiền" />
-      <p id="result"></p>
+      <div id="jackpot-popup" class="jackpot-popup">
+        <p id="jackpot-message"></p>
+        <p id="jackpot-amount"></p>
+      </div>
+
+      <div class="bet-buttons">
+        <button onclick="setBet(1)">x1</button>
+        <button onclick="setBet(2)">x2</button>
+        <button onclick="setBet(5)">x5</button>
+        <button onclick="setBet(10)">x10</button>
+        <button onclick="setBet('all')">All-in</button>
+      </div>
+      <p>Số tiền cược: <strong id="bet-amount-text">100</strong>💰</p>
+
       <button onclick="rollDice()" id="roll-btn" disabled>Lắc Xúc Xắc</button>
       <p
         id="countdown"

@@ -143,28 +143,6 @@ body {
   box-shadow: none;
 }
 
-/* Ô nhập số tiền cược */
-#bet-amount {
-  font-family: "Arial" Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-  width: 160px;
-  padding: 10px;
-  border: 2px solid #ffffff;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #000000;
-  outline: none;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0px 3px 10px rgba(255, 255, 255, 0.3);
-}
-
-#bet-amount:focus {
-  border-color: #ff4500;
-  box-shadow: 0px 0px 15px rgba(255, 69, 0, 0.6);
-}
-
 /* Nhóm nhập tiền cược */
 .bet-container {
   display: flex;
@@ -240,6 +218,132 @@ body {
   display: none; /* Ban đầu ẩn */
 }
 
+/* Modal Popup */
+.jackpot-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 223, 0, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #222;
+  box-shadow: 0px 0px 20px rgba(255, 223, 0, 1);
+  animation: fadeIn 0.5s ease-in-out;
+}
 
+.jackpot-popup.shake {
+  animation: shake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+  0% { transform: translate(-50%, -50%) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) rotate(-2deg); }
+}
+
+/* Căn chỉnh giao diện trên điện thoại */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .game-container {
+        width: 100%;
+        max-width: 380px;
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .stats {
+        font-size: 18px;
+    }
+
+    .dice-container {
+        gap: 10px;
+    }
+
+    .dice {
+        width: 70px;
+        height: 70px;
+        font-size: 36px;
+    }
+
+    .bet-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .betting button,
+    #roll-btn,
+    #cancel-bet-btn,
+    #reset-money-btn {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    /* Popup "Nổ Hũ" đẹp mắt */
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        font-size: 18px;
+        text-align: center;
+        display: none;
+        width: 80%;
+        max-width: 350px;
+        z-index: 1000;
+    }
+
+    .popup.show {
+        display: block;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+}
+
+.bet-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.bet-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background: #ffcc00;
+    color: #333;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.bet-buttons button:hover {
+    background: #ffaa00;
+}
+
+@media (max-width: 768px) {
+    .bet-buttons button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
 
 
