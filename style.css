@@ -1,27 +1,27 @@
 /* Định dạng chung */
 body {
-  font-family: "Poppins", Arial, sans-serif;
-  text-align: center;
-  background: linear-gradient(135deg, #f7971e, #ffd200);
-  color: #333333;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  overflow: hidden;
+    font-family: "Poppins", Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ff9a00, #ffc107);
+    color: #333;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    overflow: hidden;
 }
 
 /* Khung chứa game */
 .game-container {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.7);
-  width: 450px;
-  text-align: center;
-  animation: fadeIn 0.8s ease-in-out;
-  backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    width: 450px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 
@@ -47,22 +47,29 @@ body {
 
 /* Nút cược */
 .betting button {
-  background: linear-gradient(135deg, #ff9a00, #ff4500);
-  border: none;
-  padding: 12px 20px;
-  font-size: 18px;
-  cursor: pointer;
-  margin: 5px;
-  border-radius: 10px;
-  color: #fff;
-  transition: all 0.3s ease-in-out;
-  font-weight: bold;
-  box-shadow: 0px 4px 15px rgba(255, 70, 0, 0.5);
+    background: linear-gradient(135deg, #ff9500, #ff2e00);
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 70, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    gap: 15px; /* Tăng khoảng cách giữa các nút */
+    margin-bottom: 20px; /* Thêm khoảng cách với ô nhập số tiền */
 }
 
 .betting button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(255, 75, 50, 0.8);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 70, 0, 0.6);
+}
+
+.betting button:disabled {
+    background: #7e7e7e;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Khu vực xúc xắc */
@@ -167,14 +174,6 @@ body {
   margin-top: 15px;
   gap: 8px;
 }
-
-/* Nhãn */
-.label {
-  font-family: "Poppins", Arial, sans-serif; /* Đồng bộ font */
-  font-size: 20px; /* Giống stats */
-  font-weight: 500;
-  letter-spacing: 1px;
-  color: #333; /* Màu chữ đồng bộ */
 
 /* Kết quả */
 #result {
