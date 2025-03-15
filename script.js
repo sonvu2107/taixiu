@@ -4,18 +4,20 @@ let taiCount = 0;
 let xiuCount = 0;
 
 function placeBet(choice) {
-    if (money < 100) {
-        alert("Bạn không đủ tiền để cược!");
+    let betAmount = parseInt(document.getElementById("bet-amount").value);
+
+    if (isNaN(betAmount) || betAmount <= 0) {
+        alert("Vui lòng nhập số tiền cược hợp lệ!");
         return;
     }
+    if (betAmount > money) {
+        alert("Bạn không đủ tiền để cược số này!");
+        return;
+    }
+
     betChoice = choice;
     document.getElementById("roll-btn").disabled = false;
-    alert(`Bạn đã cược ${choice} với mức cược ${getBetAmount()}💰`);
-}
-
-function getBetAmount() {
-    let multiplier = parseInt(document.getElementById("bet-multiplier").value);
-    return 100 * multiplier;
+    alert(`Bạn đã cược ${betAmount}💰 vào ${choice}`);
 }
 
 function rollDice() {
@@ -29,34 +31,33 @@ function rollDice() {
     let dice3 = document.getElementById("dice3");
     let resultText = document.getElementById("result");
 
-    // Xóa nội dung xúc xắc cũ
+    let betAmount = parseInt(document.getElementById("bet-amount").value);
+    
     dice1.textContent = "";
     dice2.textContent = "";
     dice3.textContent = "";
     resultText.textContent = "Lắc xúc xắc...";
 
-    // Hiệu ứng rung
     dice1.classList.add("shaking");
     dice2.classList.add("shaking");
     dice3.classList.add("shaking");
 
     setTimeout(() => {
-        // Xóa hiệu ứng rung
         dice1.classList.remove("shaking");
         dice2.classList.remove("shaking");
         dice3.classList.remove("shaking");
 
-        // Sinh số ngẫu nhiên từ 1 đến 6
-        let num1 = Math.floor(Math.random() * 6) + 1;
-        let num2 = Math.floor(Math.random() * 6) + 1;
-        let num3 = Math.floor(Math.random() * 6) + 1;
+        // Danh sách kết quả có trọng số cao cho 4-4-1 và 6-3-1
+        let weightedOutcomes = [
+            [4, 4, 1], [4, 4, 1], [4, 4, 1], [4, 4, 1], 
+            [6, 3, 1], [6, 3, 1], [6, 3, 1], [6, 3, 1], 
+            [1, 2, 3], [2, 2, 2], [3, 3, 3], [5, 5, 6], 
+            [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1]
+        ];
+
+        let selectedRoll = weightedOutcomes[Math.floor(Math.random() * weightedOutcomes.length)];
+        let [num1, num2, num3] = selectedRoll;
         let total = num1 + num2 + num3;
-
-        // Hiển thị kết quả
-        dice1.textContent = num1;
-        dice2.textContent = num2;
-        dice3.textContent = num3;
-
         let result = total >= 11 ? "Tài" : "Xỉu";
 
         if (result === "Tài") taiCount++;
@@ -65,10 +66,10 @@ function rollDice() {
         document.getElementById("tai-count").textContent = taiCount;
         document.getElementById("xiu-count").textContent = xiuCount;
 
-        // Lấy số tiền cược
-        let betAmount = getBetAmount();
+        dice1.textContent = num1;
+        dice2.textContent = num2;
+        dice3.textContent = num3;
 
-        // Kiểm tra thắng thua
         if (betChoice === result) {
             money += betAmount;
             resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
@@ -80,5 +81,5 @@ function rollDice() {
         document.getElementById("money").textContent = money;
         document.getElementById("roll-btn").disabled = true;
         betChoice = null;
-    }, 1500);
+    }, 3000);
 }
