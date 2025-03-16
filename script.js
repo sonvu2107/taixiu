@@ -218,7 +218,6 @@ function showJackpotPopup(message, amount) {
   }, 4000);
 }
 
-
 // Xác suất nổ hũ với các mức thưởng
 const jackpotRates = [
   { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
@@ -241,16 +240,14 @@ const jackpotRates = [
 ];
 
 function checkJackpot() {
-  let random = Math.random() * 100; // Tạo số từ 0 đến 100
+  let random = Math.random() * 100; // Số ngẫu nhiên từ 0 đến 100
+  let cumulativeChance = 0; // Tổng xác suất tích lũy
 
-  if (random < 20) { 
-    return { multiplier: 2, message: "🎉 May mắn! x2 số tiền cược! 🎉" }; // 20% x2
-  } else if (random < 30) { 
-    return { multiplier: 5, message: "🔥 Siêu Nổ Hũ! x5 số tiền cược! 🔥" }; // 10% x5
-  } else if (random < 35) { 
-    return { multiplier: 10, message: "💥 Đại Nổ Hũ! x10 số tiền cược! 💥" }; // 5% x10
-  } else if (random < 36) { 
-    return { multiplier: 100, message: "🔥🔥 Cực Đại Nổ Hũ! x100 số tiền cược!!! 🎰💰" }; // 1% x100
+  for (let rate of jackpotRates) {
+    cumulativeChance += rate.chance;
+    if (random < cumulativeChance) {
+      return { multiplier: rate.multiplier, message: rate.message };
+    }
   }
 
   return null; // Không nổ hũ
