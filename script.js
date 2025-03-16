@@ -120,27 +120,39 @@ function rollDice() {
     document.getElementById("xiu-count").textContent = xiuCount;
 
     let betAmount = getBetAmount();
-    if (betChoice === result) {
-      money += betAmount;
-      houseMoney -= betAmount; // Nhà cái mất tiền
-      winCount++;
-      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${betAmount}💰!</strong>`;
+    let isWin = betChoice === result;
+    let jackpot = checkJackpot(); // Kiểm tra có nổ hũ không
+    let jackpotMultiplier = jackpot ? jackpot.multiplier : 1;
+    let winAmount = isWin ? betAmount * jackpotMultiplier : 0;
+
+    if (isWin) {
+      money += winAmount; // Cộng đúng số tiền
+      houseMoney -= winAmount;
+
+      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${winAmount.toLocaleString()}💰!</strong>`;
+
+      if (jackpot) {
+        showJackpotPopup(jackpot.message, winAmount); // Hiển thị đúng số tiền
+      }
     } else {
       money -= betAmount;
-      houseMoney += betAmount; // Nhà cái ăn tiền
+      houseMoney += betAmount;
       loseCount++;
-      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount}💰!</strong>`;
+      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount.toLocaleString()}💰!</strong>`;
+
+      if (jackpot) {
+        showJackpotPopup("Bạn không nổ hũ lần này 😢", 0);
+      }
     }
 
-    document.getElementById("money").textContent = money;
+    document.getElementById("money").textContent = money.toLocaleString();
     updateWinStats();
-    updateHouseMoney(); // Cập nhật số tiền nhà cái
+    updateHouseMoney();
 
-    // Kiểm tra nếu nhà cái hết tiền
     if (houseMoney <= 0) {
       alert("🎉 Nhà cái đã cạn tiền! Bạn thắng chung cuộc!");
-      houseMoney = 1000000; // Reset lại quỹ nhà cái
-      money += 50000; // Thưởng thêm tiền cho người chơi
+      houseMoney = 1000000;
+      money += 50000;
     }
 
     if (money <= 0) {
@@ -153,7 +165,6 @@ function rollDice() {
     betChoice = null;
   }, 3000);
 }
-
 
 function updateMoney(amount) {
   money = amount;
@@ -174,3 +185,52 @@ function resetMoney() {
   alert("Bạn đã được cấp lại 25000💰 để tiếp tục chơi!");
 }
 
+function showJackpotPopup(message, amount) {
+  let popup = document.createElement("div");
+  popup.classList.add("jackpot-popup");
+  popup.innerHTML = `
+    <strong>${message}</strong><br>
+    <span style="font-size: 24px; color: gold;">+${amount.toLocaleString()}💰</span>
+  `;
+
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.remove();
+  }, 3000);
+}
+
+// Xác suất nổ hũ với các mức thưởng
+const jackpotRates = [
+  { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
+  {
+    chance: 30,
+    multiplier: 2,
+    message: "🔥 Nổ Hũ 🎉 Nhận gấp đôi số tiền cược!",
+  },
+  { chance: 15, multiplier: 0, message: "🤡 Nổ Dái! Không nhận được gì!" },
+  {
+    chance: 10,
+    multiplier: 5,
+    message: "💥 Siêu Nổ Hũ! Nhận x5 số tiền cược!",
+  },
+  {
+    chance: 0.1,
+    multiplier: 100,
+    message: "🔥🔥 Đại Nổ Hũ! Nhận x100 số tiền cược!!! 🎰💰",
+  },
+];
+
+function checkJackpot() {
+  let random = Math.random();
+
+  if (random < 0.05) {
+    // 5% nổ hũ
+    return { multiplier: 10, message: "🔥 Nổ hũ! x10 số tiền cược! 🔥" };
+  } else if (random < 0.1) {
+    // 5% x2
+    return { multiplier: 2, message: "🎉 May mắn! x2 số tiền cược! 🎉" };
+  }
+
+  return null; // Không nổ hũ
+}
