@@ -121,20 +121,22 @@ function rollDice() {
 
     let betAmount = getBetAmount();
     let isWin = betChoice === result;
-    let jackpot = checkJackpot(); // Kiểm tra có nổ hũ không
+    let jackpot = checkJackpot();
     let jackpotMultiplier = jackpot ? jackpot.multiplier : 1;
     let winAmount = isWin ? betAmount * jackpotMultiplier : 0;
 
-    // 🛠 Kiểm tra quỹ nhà cái trước khi trả tiền nổ hũ
     if (jackpot && winAmount > houseMoney) {
-      winAmount = houseMoney; // Nhà cái chỉ trả hết khả năng
+      winAmount = houseMoney;
       jackpotMultiplier = houseMoney / betAmount;
     }
 
     if (isWin) {
-      winCount++; // ✅ Đảm bảo cộng số trận thắng
+      winCount++;
       money += winAmount;
       houseMoney -= winAmount;
+      updateExp(20); // Cộng EXP khi thắng
+
+      completeMission(1); // Cộng tiến độ cho nhiệm vụ "Thắng 3 ván"
 
       if (jackpot) {
         showJackpotPopup(jackpot.message, winAmount);
@@ -153,6 +155,9 @@ function rollDice() {
     updateWinStats();
     updateHouseMoney();
 
+    // Cộng tiến độ cho nhiệm vụ "Chơi 5 ván"
+    completeMission(0);
+
     if (houseMoney <= 0) {
       alert("🏆 Nhà cái đã phá sản! Bạn thắng chung cuộc!");
       houseMoney = 1000000000;
@@ -169,6 +174,7 @@ function rollDice() {
     betChoice = null;
   }, 3000);
 }
+
 
 function updateMoney(amount) {
   money = amount;
@@ -244,5 +250,106 @@ function checkJackpot() {
   }
 
   return null; // Không nổ hũ
+}
+let level = 1;
+let exp = 0;
+let expToNextLevel = 100;
+let money = 250000;
+let hasSpun = false; // Kiểm soát vòng quay
+
+// 🏆 Nhiệm vụ hàng ngày
+let missions = [
+  { text: "Chơi 5 ván", progress: 0, goal: 5, reward: 50 },
+  { text: "Thắng 3 ván", progress: 0, goal: 3, reward: 100 },
+];
+
+function updateExp(amount) {
+  exp += amount;
+  if (exp >= expToNextLevel) {
+    levelUp();
+  }
+  document.getElementById("player-level").textContent = level;
+  document.getElementById("exp-fill").style.width = (exp / expToNextLevel) * 100 + "%";
+  document.getElementById("player-exp").textContent = exp;
+}
+
+function levelUp() {
+  level++;
+  exp = 0;
+  expToNextLevel += 50;
+  alert(`🎉 Bạn đã lên cấp ${level}! Nhận 500 VND!`);
+  money += 500;
+}
+
+function updateMissions() {
+  let missionList = document.getElementById("mission-list");
+  if (!missionList) return;
+  missionList.innerHTML = "";
+  missions.forEach((mission, index) => {
+    let item = document.createElement("li");
+    item.textContent = `${mission.text}: ${mission.progress}/${mission.goal}`;
+    if (mission.progress >= mission.goal) {
+      item.style.color = "lime";
+    }
+    missionList.appendChild(item);
+  });
+}
+
+function completeMission(index) {
+  if (missions[index].progress >= missions[index].goal) return;
+  missions[index].progress++;
+  if (missions[index].progress === missions[index].goal) {
+    money += missions[index].reward;
+    alert(`✅ Hoàn thành nhiệm vụ! Nhận ${missions[index].reward} VND!`);
+  }
+  updateMissions();
+}
+
+// 🎡 Vòng quay may mắn
+function spinWheel() {
+  if (hasSpun) {
+    alert("🎡 Bạn đã quay hôm nay! Hãy quay lại vào ngày mai!");
+    return;
+  }
+  hasSpun = true;
+  let prizes = [100, 200, 500, 1000, 0];
+  let reward = prizes[Math.floor(Math.random() * prizes.length)];
+  if (reward > 0) {
+    alert(`🎊 Chúc mừng! Bạn nhận được ${reward} VND từ vòng quay!`);
+    money += reward;
+  } else {
+    alert("😢 Không may rồi! Chúc bạn may mắn lần sau!");
+  }
+  document.getElementById("spin-result").textContent = `🎁 Nhận ${reward} VND`;
+}
+
+document.getElementById("spin-wheel").addEventListener("click", spinWheel);
+updateMissions();
+
+// 📜 Menu Toggle
+document.getElementById("toggle-menu").addEventListener("click", function () {
+  document.querySelector(".menu-content").classList.toggle("active");
+});
+
+// 🏆 Chuyển tab menu
+document.querySelectorAll(".tab-btn").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
+
+    this.classList.add("active");
+    document.getElementById(this.dataset.tab).classList.add("active");
+  });
+});
+
+// 🎲 Cập nhật EXP khi chơi
+function addExp(amount) {
+  updateExp(amount);
+}
+
+// 🎰 Cập nhật khi thắng ván
+function playerWin() {
+  addExp(10);
+  completeMission(1);
 }
 

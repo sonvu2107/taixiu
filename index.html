@@ -35,6 +35,31 @@
         <p id="jackpot-message"></p>
         <p id="jackpot-amount"></p>
       </div>
+      <div class="menu-container">
+        <button id="toggle-menu">📜 Menu</button>
+        <div class="menu-content">
+          <div class="menu-tabs">
+            <button class="tab-btn active" data-tab="info">Thông tin</button>
+            <button class="tab-btn" data-tab="spin">Vòng quay</button>
+          </div>
+
+          <div class="tab-content active" id="info">
+            <h3>Thông tin cấp độ</h3>
+            <p>LV: <span id="player-level">1</span></p>
+            <div class="exp-bar">
+              <div class="exp-fill" id="exp-fill" style="width: 10%"></div>
+            </div>
+            <p>EXP: <span id="player-exp">10</span>/100</p>
+          </div>
+
+          <div class="tab-content" id="spin">
+            <h3>Vòng quay may mắn</h3>
+            <button id="spin-wheel">🎡 Quay</button>
+            <p id="spin-result"></p>
+          </div>
+        </div>
+      </div>
+
       <label for="bet-amount">Nhập số tiền cược:</label>
       <input type="number" id="bet-amount" min="1" placeholder="Nhập số tiền" />
       <p id="result"></p>
