@@ -251,105 +251,61 @@ function checkJackpot() {
 
   return null; // Không nổ hũ
 }
-let level = 1;
-let exp = 0;
-let expToNextLevel = 100;
-let money = 250000;
-let hasSpun = false; // Kiểm soát vòng quay
 
-// 🏆 Nhiệm vụ hàng ngày
+// 1️⃣ Mở Menu
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("show");
+}
+
+// 2️⃣ Hiển Thị Thông Tin (LV / EXP)
+function showInfo() {
+  document.getElementById("content-area").innerHTML = `
+    <h3>Thông tin cấp độ</h3>
+    <p>LV: <span id="player-level">1</span></p>
+    <div class="exp-bar">
+      <div class="exp-fill" id="exp-fill" style="width: 10%;"></div>
+    </div>
+    <p>EXP: <span id="player-exp">10</span>/100</p>
+  `;
+}
+
+// 3️⃣ Hiển Thị Nhiệm Vụ Hàng Ngày
+function showMissions() {
+  document.getElementById("content-area").innerHTML = `
+    <h3>Nhiệm vụ hàng ngày</h3>
+    <ul id="mission-list"></ul>
+  `;
+  updateMissions(); // Cập nhật danh sách nhiệm vụ
+}
+
+// 4️⃣ Hiển Thị Vòng Quay May Mắn
+function showSpinWheel() {
+  document.getElementById("content-area").innerHTML = `
+    <h3>Vòng quay may mắn</h3>
+    <button onclick="spinWheel()">🎡 Quay</button>
+    <p id="spin-result"></p>
+  `;
+}
+
+// 5️⃣ Xử Lý Vòng Quay
+function spinWheel() {
+  let prizes = ["100 VND", "200 VND", "500 VND", "1.000 VND", "Mất lượt"];
+  let prize = prizes[Math.floor(Math.random() * prizes.length)];
+  document.getElementById("spin-result").textContent = "🎁 " + prize;
+}
+
+// 6️⃣ Cập Nhật Nhiệm Vụ
 let missions = [
   { text: "Chơi 5 ván", progress: 0, goal: 5, reward: 50 },
   { text: "Thắng 3 ván", progress: 0, goal: 3, reward: 100 },
 ];
 
-function updateExp(amount) {
-  exp += amount;
-  if (exp >= expToNextLevel) {
-    levelUp();
-  }
-  document.getElementById("player-level").textContent = level;
-  document.getElementById("exp-fill").style.width = (exp / expToNextLevel) * 100 + "%";
-  document.getElementById("player-exp").textContent = exp;
-}
-
-function levelUp() {
-  level++;
-  exp = 0;
-  expToNextLevel += 50;
-  alert(`🎉 Bạn đã lên cấp ${level}! Nhận 500 VND!`);
-  money += 500;
-}
-
 function updateMissions() {
   let missionList = document.getElementById("mission-list");
-  if (!missionList) return;
   missionList.innerHTML = "";
-  missions.forEach((mission, index) => {
+  missions.forEach((mission) => {
     let item = document.createElement("li");
     item.textContent = `${mission.text}: ${mission.progress}/${mission.goal}`;
-    if (mission.progress >= mission.goal) {
-      item.style.color = "lime";
-    }
     missionList.appendChild(item);
   });
 }
-
-function completeMission(index) {
-  if (missions[index].progress >= missions[index].goal) return;
-  missions[index].progress++;
-  if (missions[index].progress === missions[index].goal) {
-    money += missions[index].reward;
-    alert(`✅ Hoàn thành nhiệm vụ! Nhận ${missions[index].reward} VND!`);
-  }
-  updateMissions();
-}
-
-// 🎡 Vòng quay may mắn
-function spinWheel() {
-  if (hasSpun) {
-    alert("🎡 Bạn đã quay hôm nay! Hãy quay lại vào ngày mai!");
-    return;
-  }
-  hasSpun = true;
-  let prizes = [100, 200, 500, 1000, 0];
-  let reward = prizes[Math.floor(Math.random() * prizes.length)];
-  if (reward > 0) {
-    alert(`🎊 Chúc mừng! Bạn nhận được ${reward} VND từ vòng quay!`);
-    money += reward;
-  } else {
-    alert("😢 Không may rồi! Chúc bạn may mắn lần sau!");
-  }
-  document.getElementById("spin-result").textContent = `🎁 Nhận ${reward} VND`;
-}
-
-document.getElementById("spin-wheel").addEventListener("click", spinWheel);
-updateMissions();
-
-// 📜 Menu Toggle
-document.getElementById("toggle-menu").addEventListener("click", function () {
-  document.querySelector(".menu-content").classList.toggle("active");
-});
-
-// 🏆 Chuyển tab menu
-document.querySelectorAll(".tab-btn").forEach((btn) => {
-  btn.addEventListener("click", function () {
-    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
-
-    this.classList.add("active");
-    document.getElementById(this.dataset.tab).classList.add("active");
-  });
-});
-
-// 🎲 Cập nhật EXP khi chơi
-function addExp(amount) {
-  updateExp(amount);
-}
-
-// 🎰 Cập nhật khi thắng ván
-function playerWin() {
-  addExp(10);
-  completeMission(1);
-}
-

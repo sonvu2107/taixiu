@@ -208,37 +208,6 @@ body {
   box-shadow: none;
 }
 
-#reset-money-btn {
-  background: linear-gradient(135deg, #28a745, #218838);
-  border: none;
-  padding: 12px 28px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-  margin-top: 15px;
-  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
-  display: none; /* Ban đầu ẩn */
-}
-
-#reset-money-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.7);
-}
-
-.menu {
-  position: absolute;
-  top: 40px;
-  right: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: none; /* Ban đầu ẩn */
-}
-
 /* Căn chỉnh giao diện trên điện thoại */
 @media (max-width: 768px) {
   body {
@@ -316,53 +285,74 @@ body {
   box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.8);
 }
 
-.menu-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
-
-.menu-content {
+.menu {
   display: none;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 250px;
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  background-color: #ff8989;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px 0;
 }
 
-.menu-content.active {
+.menu.show {
   display: block;
 }
 
-.menu-tabs {
-  display: flex;
+.menu a {
+  padding: 12px 20px;
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s ease;
 }
 
-.tab-btn {
-  flex: 1;
-  padding: 5px;
+.menu a:hover {
+  background: #ff6666;
+}
+
+.menu-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Hiệu ứng popup */
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.popup-content {
+  position: relative;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
   cursor: pointer;
 }
 
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
+.popup.show {
   display: block;
-}
-
-.exp-bar {
-  width: 100%;
-  background: #ddd;
-  height: 10px;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.exp-fill {
-  height: 100%;
-  background: limegreen;
-  width: 0%;
 }
 
