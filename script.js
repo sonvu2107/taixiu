@@ -74,7 +74,7 @@ function updateWinStats() {
 let houseMoney = 1000000000; // Quỹ nhà cái
 
 function updateHouseMoney() {
-  document.getElementById("house-money").textContent = houseMoney;
+  document.getElementById("house-money").textContent = houseMoney.toLocaleString();
 }
 
 function rollDice() {
@@ -138,15 +138,15 @@ function rollDice() {
 
       if (jackpot) {
         showJackpotPopup(jackpot.message, winAmount);
-        resultText.innerHTML = `🔥 NỔ HŨ! 🔥 <br> Tổng: ${total} - <strong style="color: #FF0000;">${result} 🎉 Bạn thắng ${winAmount.toLocaleString()} VND!</strong>`;
+        resultText.innerHTML = `🔥 NỔ HŨ! 🔥 <br> Tổng: ${total} - <strong style="color: #FF0000;">${result} Bạn thắng ${winAmount.toLocaleString()} VND!</strong>`;
       } else {
-        resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} 🎉 Bạn thắng ${winAmount.toLocaleString()} VND!</strong>`;
+        resultText.innerHTML = `Tổng: ${total} - <strong style="color: #32CD32;">${result} Bạn thắng ${winAmount.toLocaleString()} VND!</strong>`;
       }
     } else {
       loseCount++;
       money -= betAmount;
       houseMoney += betAmount;
-      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} 😢 Bạn thua ${betAmount.toLocaleString()} VND!</strong>`;
+      resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} Bạn thua ${betAmount.toLocaleString()} VND!</strong>`;
     }
 
     document.getElementById("money").textContent = money.toLocaleString();
@@ -172,7 +172,7 @@ function rollDice() {
 
 function updateMoney(amount) {
   money = amount;
-  document.getElementById("money").textContent = money;
+  document.getElementById("money").textContent = money.toLocaleString();
 
   // Kiểm tra nếu hết tiền thì hiện nút cấp tiền
   if (money <= 0) {
@@ -182,12 +182,6 @@ function updateMoney(amount) {
   }
 }
 
-function resetMoney() {
-  money = 25000;
-  updateMoney(money);
-  document.getElementById("reset-money-btn").style.display = "none"; // Ẩn nút sau khi cấp tiền
-  alert("Bạn đã được cấp lại 25000💰 để tiếp tục chơi!");
-}
 
 function showJackpotPopup(message, amount) {
   let popup = document.createElement("div");
@@ -224,18 +218,18 @@ const jackpotRates = [
   {
     chance: 30,
     multiplier: 2,
-    message: "🔥 Nổ Hũ 🎉 Nhận gấp đôi số tiền cược!",
+    message: "Nổ Hũ , x2 tiền cược!",
   },
-  { chance: 15, multiplier: 0, message: "🤡 Nổ Dái! Không nhận được gì!" },
+  { chance: 15, multiplier: 0, message: "Nổ Dái! Có cái dái thôi!" },
   {
     chance: 10,
     multiplier: 5,
-    message: "💥 Siêu Nổ Hũ! Nhận x5 số tiền cược!",
+    message: "Siêu Nổ Hũ, x5 tiền cược!",
   },
   {
     chance: 0.1,
     multiplier: 100,
-    message: "🔥🔥 Đại Nổ Hũ! Nhận x100 số tiền cược!!! 🎰💰",
+    message: "Tài lộc quá lớn!!!! Nhận x100 tiền cược!!!",
   },
 ];
 
