@@ -285,14 +285,16 @@ body {
   box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.8);
 }
 
+/* Menu */
 .menu {
   display: none;
   position: absolute;
   top: 40px;
   right: 10px;
-  background-color: #ff8989;
+  background-color: #808080; /* Chỉnh màu nền thành xám */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  z-index: 1;
   padding: 10px 0;
 }
 
@@ -304,15 +306,16 @@ body {
   padding: 12px 20px;
   display: block;
   font-size: 16px;
+  text-transform: uppercase;
   font-weight: 600;
-  color: #fff;
+  color: white; /* Đổi màu chữ thành trắng để dễ nhìn */
   text-decoration: none;
   border-radius: 6px;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .menu a:hover {
-  background: #ff6666;
+  background-color: #6e6e6e; /* Màu xám đậm hơn khi hover */
 }
 
 .menu-icon {
@@ -321,7 +324,7 @@ body {
   right: 15px;
   cursor: pointer;
   font-size: 24px;
-  color: #333;
+  color: white; /* Màu trắng cho biểu tượng menu */
 }
 
 /* Hiệu ứng popup */
