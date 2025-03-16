@@ -25,8 +25,8 @@ function placeBet(choice) {
 }
 
 function getBetAmount() {
-  let amount = parseInt(document.getElementById("bet-amount").value);
-  return isNaN(amount) || amount <= 0 ? 100 : amount;
+  let amount = document.getElementById("bet-amount").value.replace(/\D/g, ""); 
+  return isNaN(amount) || amount <= 0 ? 100 : parseInt(amount);
 }
 
 function startCountdown() {
@@ -182,7 +182,6 @@ function updateMoney(amount) {
   }
 }
 
-
 function showJackpotPopup(message, amount) {
   let popup = document.createElement("div");
   popup.classList.add("jackpot-popup");
@@ -246,3 +245,4 @@ function checkJackpot() {
 
   return null; // Không nổ hũ
 }
+
