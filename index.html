@@ -39,31 +39,6 @@
         <p id="jackpot-message"></p>
         <p id="jackpot-amount"></p>
       </div>
-      <!-- Nút mở menu -->
-      <div class="menu-icon" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-      </div>
-
-      <!-- Menu -->
-      <div class="menu" id="menu">
-        <a href="#" onclick="showPopup('info')">
-          <i class="fas fa-user"></i> Thông tin (LV / EXP)
-        </a>
-        <a href="#" onclick="showPopup('missions')">
-          <i class="fas fa-tasks"></i> Nhiệm vụ hàng ngày
-        </a>
-        <a href="#" onclick="showPopup('spin')">
-          <i class="fas fa-dice"></i> Vòng quay may mắn
-        </a>
-      </div>
-      <!-- Popup chung -->
-      <div id="popup" class="popup">
-        <div class="popup-content">
-          <span class="close-btn" onclick="closePopup()">&times;</span>
-          <div id="popup-body"></div>
-        </div>
-      </div>
-
       <label for="bet-amount">Nhập số tiền cược:</label>
       <input type="number" id="bet-amount" min="1" placeholder="Nhập số tiền" />
       <p id="result"></p>
