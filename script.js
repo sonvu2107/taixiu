@@ -71,7 +71,7 @@ function updateWinStats() {
   document.getElementById("win-rate").textContent = `${winRate}%`;
 }
 
-let houseMoney = 1000000000; // Quỹ nhà cái
+let houseMoney = 1000000000000; // Quỹ nhà cái
 
 function updateHouseMoney() {
   document.getElementById("house-money").textContent =
@@ -214,7 +214,7 @@ function showJackpotPopup(message, amount) {
 
 // Xác suất nổ hũ với các mức thưởng
 const jackpotRates = [
-  { chance: 60, multiplier: 0.5, message: "Bạn đã nhận lại một nửa số tiển cược!"},
+  { chance: 60, multiplier: 500, message: "Bạn đã nhận lại một nửa số tiển cược!"},
   { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
   {
     chance: 30,
