@@ -220,7 +220,7 @@ function showJackpotPopup(message, amount) {
 const jackpotRates = [
   {
     chance: 60,
-    multiplier: 0.5,
+    multiplier: 5000,
     message: "Bạn đã nhận lại một nửa số tiền cược!",
   },
   { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
