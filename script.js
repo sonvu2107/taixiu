@@ -214,6 +214,7 @@ function showJackpotPopup(message, amount) {
 
 // Xác suất nổ hũ với các mức thưởng
 const jackpotRates = [
+  
   { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
   {
     chance: 30,
