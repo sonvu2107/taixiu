@@ -1,4 +1,4 @@
-let money = 250000;
+let money = 250000000;
 let betChoice = null;
 let taiCount = 0;
 let xiuCount = 0;
