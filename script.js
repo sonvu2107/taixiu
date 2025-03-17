@@ -124,7 +124,11 @@ function rollDice() {
     let isWin = betChoice === result;
     let jackpot = checkJackpot(); // Kiểm tra có nổ hũ không
     let jackpotMultiplier = jackpot ? jackpot.multiplier : 1;
-    let winAmount = isWin ? betAmount * jackpotMultiplier : 0;
+    let winAmount = isWin
+      ? betAmount * jackpotMultiplier
+      : jackpotMultiplier === 0
+      ? betAmount
+      : 0;
 
     // 🛠 Kiểm tra quỹ nhà cái trước khi trả tiền nổ hũ
     if (jackpot && winAmount > houseMoney) {
@@ -214,24 +218,28 @@ function showJackpotPopup(message, amount) {
 
 // Xác suất nổ hũ với các mức thưởng
 const jackpotRates = [
-  { chance: 60, multiplier: 0.500, message: "Bạn đã nhận lại một nửa số tiền cược!"},
+  {
+    chance: 60,
+    multiplier: 0.5,
+    message: "Bạn đã nhận lại một nửa số tiền cược!",
+  },
   { chance: 50, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
   {
     chance: 30,
     multiplier: 2,
-    message: "Nổ Hũ , x2 tiền cược!"
+    message: "Nổ Hũ , x2 tiền cược!",
   },
-  { chance: 15, multiplier: 0, message: "Nổ Dái! Có cái dái thôi!" },
+  { chance: 20, multiplier: 0, message: "Nổ Dái! Có cái dái thôi!" },
   {
-    chance: 10,
+    chance: 15,
     multiplier: 5,
-    message: "Siêu Nổ Hũ, x5 tiền cược!"
+    message: "Siêu Nổ Hũ, x5 tiền cược!",
   },
-  { chance: 5, multiplier: 10, message: "Thần tài đến, x10 tiền cược!!"},
+  { chance: 10, multiplier: 10, message: "Thần tài đến, x10 tiền cược!!" },
   {
-    chance: 0.1,
-    multiplier: 100,
-    message: "Tài lộc quá lớn!!!! Nhận x100 tiền cược!!!"
+    chance: 1,
+    multiplier: 500,
+    message: "Tài lộc quá lớn!!!! Nhận x500 tiền cược!!!",
   },
 ];
 
