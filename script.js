@@ -133,11 +133,9 @@ function rollDice() {
     let isWin = betChoice === result;
     let jackpot = checkJackpot(); // Kiểm tra có nổ hũ không
     let jackpotMultiplier = jackpot ? jackpot.multiplier : 1;
-    let winAmount = isWin
-      ? betAmount * jackpotMultiplier
-      : jackpotMultiplier === 0
-      ? betAmount
-      : 0;
+
+    // 🔥 Cách tính tiền thắng chuẩn
+    let winAmount = isWin ? betAmount * jackpotMultiplier : 0;
 
     // 🛠 Kiểm tra quỹ nhà cái trước khi trả tiền nổ hũ
     if (jackpot && winAmount > houseMoney) {
