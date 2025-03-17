@@ -134,8 +134,14 @@ function rollDice() {
     let jackpot = checkJackpot(); // Kiểm tra có nổ hũ không
     let jackpotMultiplier = jackpot ? jackpot.multiplier : 1;
 
-    // 🔥 Cách tính tiền thắng chuẩn
-    let winAmount = isWin ? betAmount * jackpotMultiplier : 0;
+    // 🔥 Xử lý tiền thắng/thua
+    let winAmount;
+    if (jackpotMultiplier === 0) {
+      winAmount = 0;
+      houseMoney += betAmount; // Nhà cái nhận toàn bộ tiền cược khi tạch hũ
+    } else {
+      winAmount = isWin ? betAmount * jackpotMultiplier : 0;
+    }
 
     // 🛠 Kiểm tra quỹ nhà cái trước khi trả tiền nổ hũ
     if (jackpot && winAmount > houseMoney) {
