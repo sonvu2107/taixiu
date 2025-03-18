@@ -140,7 +140,8 @@ function rollDice() {
       winAmount = 0;
       houseMoney += betAmount; // Nhà cái nhận toàn bộ tiền cược khi tạch hũ
     } else {
-      winAmount = isWin ? betAmount * jackpotMultiplier : 0;
+      winAmount = betAmount * jackpotMultiplier; // Hoàn tiền đúng với tỷ lệ nổ hũ
+      houseMoney -= winAmount; // Trừ tiền nhà cái khi trả thưởng
     }
 
     // 🛠 Kiểm tra quỹ nhà cái trước khi trả tiền nổ hũ
@@ -238,37 +239,37 @@ function showJackpotPopup(message, amount, isFail = false) {
 
 // Xác suất nổ hũ với các mức thưởng
 const jackpotRates = [
-   { 
-     chance: 55,
-   multiplier: 0,
-   message: "Tạch Hũ! Bạn không nhận được gì rồi!" },
-  
+  {
+    chance: 55,
+    multiplier: 0,
+    message: "Tạch Hũ! Bạn không nhận được gì rồi!",
+  },
+
   {
     chance: 30,
     multiplier: 0.5,
     message: "Bạn đã nhận lại một nửa số tiền cược!",
   },
-  
-  { chance: 25,
-   multiplier: 1,
-   message: "Bạn đã nhận lại số tiền cược!" },
+
+  { chance: 25, multiplier: 1, message: "Bạn đã nhận lại số tiền cược!" },
   {
     chance: 20,
     multiplier: 2,
-    message: "Nổ Hũ , x2 tiền cược!"
+    message: "Nổ Hũ , x2 tiền cược!",
   },
-  
+
   {
     chance: 15,
     multiplier: 5,
-    message: "Siêu Nổ Hũ, x5 tiền cược!"
+    message: "Siêu Nổ Hũ, x5 tiền cược!",
   },
-  
-  { 
+
+  {
     chance: 10,
-   multiplier: 10,
-   message: "Thần tài đến, x10 tiền cược!!" },
-  
+    multiplier: 10,
+    message: "Thần tài đến, x10 tiền cược!!",
+  },
+
   {
     chance: 0.5,
     multiplier: 500,
@@ -286,6 +287,6 @@ function checkJackpot() {
       return { multiplier: rate.multiplier, message: rate.message };
     }
   }
-  
+
   return null; // Không nổ hũ
 }
