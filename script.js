@@ -158,10 +158,13 @@ function rollDice() {
     // 🔵 Hiển thị kết quả
     if (jackpot) {
       showJackpotPopup(jackpot.message, winAmount, jackpotMultiplier === 0);
+
       if (jackpotMultiplier === 0) {
         resultText.innerHTML = `💥 <strong style="color: #FF0000;">Tạch Hũ! Bạn không nhận được gì!</strong>`;
+        loseCount++; // 💥 Nếu tạch hũ, tăng số lần thua
       } else {
         resultText.innerHTML = `🔥 NỔ HŨ! 🔥 <br> Tổng: ${total} - <strong style="color: #FF0000;">${result} Bạn thắng ${winAmount.toLocaleString()} VND!</strong>`;
+        winCount++; // 🔥 Nếu nổ hũ, tăng số lần thắng
       }
     } else if (isWin) {
       winCount++;
@@ -172,7 +175,7 @@ function rollDice() {
       resultText.innerHTML = `Tổng: ${total} - <strong style="color: #FF4500;">${result} Bạn thua ${betAmount.toLocaleString()} VND!</strong>`;
     }
 
-    document.getElementById("money").textContent = money.toLocaleString();
+    // ⚡ Cập nhật lại thống kê thắng/thua
     updateWinStats();
     updateHouseMoney();
 
